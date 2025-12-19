@@ -1,0 +1,8 @@
+# 请求数据（前进距离）
+float32 goal
+---
+# 最终响应（坐标）
+geometry_msgs/Point point
+---
+# 连续反馈（剩余距离）
+float32 distance

@@ -1,0 +1,4 @@
+/**:
+  ros__parameters:
+    distance: 0.5
+    use_sim_time: false

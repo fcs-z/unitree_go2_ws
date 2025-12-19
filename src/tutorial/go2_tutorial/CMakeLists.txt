@@ -1,0 +1,116 @@
+cmake_minimum_required(VERSION 3.8)
+project(go2_tutorial)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(unitree_go REQUIRED)
+find_package(unitree_api REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(go2_tutorial_inter REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
+
+# 巡航、位置获取
+add_executable(go2_ctrl src/go2_ctrl.cpp)
+target_include_directories(go2_ctrl PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_features(go2_ctrl PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+ament_target_dependencies(
+  go2_ctrl
+  "rclcpp"
+  "unitree_go"
+  "unitree_api"
+)
+add_executable(go2_state src/go2_state.cpp)
+ament_target_dependencies(
+  go2_state
+  "rclcpp"
+  "nav_msgs"
+)
+# 巡航启停，服务与客户端
+add_executable(go2_cruising_service src/go2_cruising_service.cpp)
+target_include_directories(go2_cruising_service PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+ament_target_dependencies(
+  go2_cruising_service
+  "rclcpp"
+  "unitree_go"
+  "unitree_api"
+  "nav_msgs"
+  "go2_tutorial_inter"
+  "geometry_msgs"
+)
+add_executable(go2_cruising_client src/go2_cruising_client.cpp)
+ament_target_dependencies(
+  go2_cruising_client
+  "rclcpp"
+  "unitree_go"
+  "unitree_api"
+  "nav_msgs"
+  "go2_tutorial_inter"
+  "geometry_msgs"
+)
+# go2导航
+add_executable(go2_nav_server src/go2_nav_server.cpp)
+target_include_directories(go2_nav_server PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+ament_target_dependencies(
+  go2_nav_server
+  "rclcpp"
+  "unitree_go"
+  "unitree_api"
+  "nav_msgs"
+  "go2_tutorial_inter"
+  "geometry_msgs"
+  "rclcpp_action"
+)
+add_executable(go2_nav_client src/go2_nav_client.cpp)
+ament_target_dependencies(
+  go2_nav_client
+  "rclcpp"
+  "unitree_go"
+  "unitree_api"
+  "nav_msgs"
+  "go2_tutorial_inter"
+  "geometry_msgs"
+  "rclcpp_action"
+)
+
+
+install(TARGETS 
+  go2_ctrl 
+  go2_state 
+  go2_cruising_service 
+  go2_cruising_client
+  go2_nav_server
+  go2_nav_client
+DESTINATION lib/${PROJECT_NAME}
+)
+install(DIRECTORY 
+  launch 
+  params
+DESTINATION share/${PROJECT_NAME}
+)
+
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # comment the line when a copyright and license is added to all source files
+  set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # comment the line when this package is in a git repo and when
+  # a copyright and license is added to all source files
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+ament_package()

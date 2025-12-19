@@ -1,0 +1,5 @@
+# 请求数据（1/0）
+int32 flag
+---
+# 响应结果
+geometry_msgs/Point point
