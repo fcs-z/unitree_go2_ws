@@ -924,4 +924,3 @@ source install/setup.bash
 ros2 launch go2_tutorial_py go2_nav.launch.py
 ros2 run go2_tutorial_py go2_nav_client 0.3
 ```
->>>>>>> bde864d (commit)
