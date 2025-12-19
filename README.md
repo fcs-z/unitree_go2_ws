@@ -1,4 +1,4 @@
-# unitree_go2_w
+# unitree_go2_ws
 ```
 mkdir -p unitree_go2_ws/src
 cd src
